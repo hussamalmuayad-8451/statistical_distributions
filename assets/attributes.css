@@ -1,0 +1,45 @@
+.title{
+    text-align:center;
+    width: 100%;
+    margin-top: 40px;
+
+}
+.div0{
+    padding: 10px;
+    border: 1px solid #999;
+}
+.div1{
+    border: 1px solid #999;
+
+}
+.div2{
+    border: 1px solid #999;
+}
+
+
+
+
+
+.dropdown{
+    padding: 40px;
+    margin-bottom: 20px;
+}
+.inside_dropdown{
+    margin-right: 40px;
+}
+.nutrition{
+    margin-right: 10px;
+}
+.transit{
+    margin-right: 10px;
+}
+.modifier{
+    margin-right: 10px;
+}
+.services{
+    padding: 20px;
+    margin-left: 40px;
+    font-style: italic;
+    font-family: "Roboto Mono";
+    border: 1px solid #999;
+}
