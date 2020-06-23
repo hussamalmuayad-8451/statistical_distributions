@@ -2,9 +2,9 @@ import dash_core_components as dcc
 import dash_html_components as html
 import dash_table as dt
 import plotly.figure_factory as ff
+from collections import namedtuple
 
-my_distributions = ["Normal","Poisson","Binomial","Student T","Negative Binomial"]
-
+available_distributions = ["normal","poisson","binomial"]#,"student T","negative binomial"]
 
 
 ##----------------------------------------------------------------
@@ -16,9 +16,9 @@ distribution_parameters=[
                                     hidden=False,
                                     children=[
                                         html.Div(children="Mean"),
-                                        dcc.Input(type="number", value=1),
+                                        dcc.Input(id="mean", type="number", value=0),
                                         html.Div(children="Standard deviation"),
-                                        dcc.Input(type="number", value=1),
+                                        dcc.Input(id="standard_deviation",type="number", value=1),
                                     ],
                                 ),
                                 html.Div(
@@ -26,7 +26,17 @@ distribution_parameters=[
                                     hidden=True,
                                     children=[
                                         html.Div(children="lambda"),
-                                        dcc.Input(type="number", value=1),
+                                        dcc.Input(id="lambda", type="number", value=1),
+                                    ],
+                                ),
+                                html.Div(
+                                    id="binomial",
+                                    hidden=True,
+                                    children=[
+                                        html.Div(children="n (bernoulli trial)", style={"font-style":"italic"}),
+                                        dcc.Input(id="n", type="number", value=10),
+                                        html.Div(children="p (probability of success)", style={"font-style":"italic"}),
+                                        dcc.Input(id="p", type="number", value=.5),
                                     ],
                                 ),
                             ]
@@ -44,16 +54,20 @@ page_1 = html.Div(
                 html.Div(
                     [
                         dcc.Dropdown(
-                            id="dist_drop",
+                            id="distribution_name",
                             options=[
-                                {"label": i, "value": i} for i in my_distributions
+                                {"label": i.capitalize(), "value": i} for i in available_distributions
                             ],
                             value="Normal",
                         ),
                         html.H6("N observations"),
-                        dcc.Input(type="number", value=100),
+                        dcc.Input(id="N",type="number", value=5000),
                         html.Div(
                             distribution_parameters
+                        ),
+                        html.Div(
+                            id="parameter_registry",
+                            hidden=True
                         ),
                     ],  # -------------------------------------------------------------------------- div2-top
                     style={"vertical-alight": "top"},
