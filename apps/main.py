@@ -57,10 +57,11 @@ def registry_updater(*args):
 @app.callback(
             Output("histogram","figure"),
             [Input("distribution_name","value"),
-             Input("parameter_registry","children")]
+             Input("parameter_registry","children"),
+             Input("bins","value")]
             )
 def update_histogram(*args):
-    distribution_name, parameters = args
+    distribution_name, parameters, bins = args
     #print(distribution_name, parameters)
     if distribution_name=="normal":
         random_var = np.random.normal(loc=parameters[1], scale=parameters[2], size=parameters[0])
@@ -75,6 +76,7 @@ def update_histogram(*args):
     histogram = go.Histogram(
         {
             "x": random_var,
+            "nbinsx": bins,
             "histnorm": "percent",
             "xbins": {"start": 0, "size": 10},
             "autobinx": True,
@@ -121,12 +123,32 @@ def update_scatter(*args):
         "xaxis": {"title": "probability"},
         "yaxis": {"title": "Percent"},
         "autosize": "False",
-        # "height"    : "600",
-        # "width"     : "1200",
         "showlegend": False
     }
 
     return {"data": [scatter], "layout": my_layout}
+
+
+#@app.callback(
+#            Output("N_display","children"),
+#            [Input("N","value")]
+#            )
+#def n_display(value):
+#    return str(value)
+
+
+@app.callback(
+            Output("compare_plots","hidden"),
+            [Input("onoff","value")]
+            )
+def reveal_compare_plots(value):
+    if value=="Off":
+        return True
+    else:
+        return False
+
+
+
 #numpy.random.randint  uniform
 #numpy.random.binomial
 #numpy.random.beta(a, b, size=None)

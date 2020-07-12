@@ -42,6 +42,37 @@ distribution_parameters=[
                             ]
 
 
+distribution_parameters_c=[
+                                html.Div(
+                                    id="normal_c",
+                                    hidden=False,
+                                    children=[
+                                        html.Div(children="Mean"),
+                                        dcc.Input(id="mean_c", type="number", value=0),
+                                        html.Div(children="Standard deviation"),
+                                        dcc.Input(id="standard_deviation_c",type="number", value=1),
+                                    ],
+                                ),
+                                html.Div(
+                                    id="poisson_c",
+                                    hidden=True,
+                                    children=[
+                                        html.Div(children="lambda"),
+                                        dcc.Input(id="lambda_c", type="number", value=1),
+                                    ],
+                                ),
+                                html.Div(
+                                    id="binomial_c",
+                                    hidden=True,
+                                    children=[
+                                        html.Div(children="n (bernoulli trial)", style={"font-style":"italic"}),
+                                        dcc.Input(id="n_c", type="number", value=10),
+                                        html.Div(children="p (probability of success)", style={"font-style":"italic"}),
+                                        dcc.Input(id="p_c", type="number", value=.5),
+                                    ],
+                                ),
+                            ]
+
 
 ##----------------------------------------------------------------
 ## main layout
@@ -61,7 +92,21 @@ page_1 = html.Div(
                             value="Normal",
                         ),
                         html.H6("N observations"),
-                        dcc.Input(id="N",type="number", value=5000),
+                        dcc.Slider(id="N",
+                                        min=200,
+                                        max=9000,
+                                        value=4000,
+                                        step=200,
+                                        marks={i:f"{str(i)}" for i in range(1000,10000,1000)}
+                                        ),
+                        html.H6("Bins"),
+                        dcc.Slider(id="bins",
+                                        min=10,
+                                        max=160,
+                                        value=10,
+                                        step=10,
+                                        marks={i:f"{str(i)}" for i in range(10,180,30)}
+                                        ),
                         html.Div(
                             distribution_parameters
                         ),
@@ -70,30 +115,69 @@ page_1 = html.Div(
                             hidden=True
                         ),
                     ],  # -------------------------------------------------------------------------- div2-top
-                    style={"vertical-alight": "top"},
+                    
                 ),
                 html.Div(
-                    [],  # -------------------------------------------------------------------------- div2-separator
-                    style={"vertical-alight": "top"},
+                    []
+                      # -------------------------------------------------------------------------- div2-separator
+                ,className="top_spacer"      
                 ),
                 html.Div(
                     [
                         dcc.RadioItems(
                             id="onoff",
                             labelStyle = {"display": "inline-block"},
-                            options=[{"label": i, "value": i} for i in ["On", "Off"]],
+                            options=[
+                                    {"label": "On", "value": "On"},
+                                    {"label": "Off", "value": "Off"},
+                            ],
                             value="Off",
                         )
-                    ],  # -------------------------------------------------------------------------- div2-bottom
-                    style={"vertical-alight": "top"},
+                    ],  # -------------------------------------------------------------------------- div2-bottom 
                 ),
+                html.Div(
+                    []
+                      # -------------------------------------------------------------------------- div2-separator
+                ,className="top_spacer"      
+                ),
+                html.Div(
+                    id="compare_plots",
+                    hidden=True,  
+                    children=html.Div(
+                    [
+                        dcc.Dropdown(
+                            id="distribution_name_c",
+                            options=[
+                                {"label": i.capitalize(), "value": i} for i in available_distributions
+                            ],
+                            value="Normal",
+                        ),
+                        html.H6("N observations"),
+                        #dcc.Input(id="N",type="number", value=5000),
+                        dcc.Slider(id="N_c",
+                                        min=200,
+                                        max=9000,
+                                        value=5000,
+                                        step=200,
+                                        marks={i:f"{str(i)}" for i in range(1000,9000,1000)}
+                                        ),
+                        html.Div(
+                            distribution_parameters_c
+                        ),
+                        html.Div(
+                            id="parameter_registry_c",
+                            hidden=True
+                        ),
+
+                    ]),   # -------------------------------------------------------------------------- div2-bottom
+                )
             ],
-            style={"width": "35%", "display": "inline-block", "position": "relative"},
+            style={"width": "30%", "display": "inline-block", "position": "relative", "vertical-align": "top"},
             className="div1",
         ),
         html.Div(
             [],  # -------------------------------------------------------------------------- div1-separator
-            style={"width": "7%", "display": "inline-block", "position": "relative"},
+            style={"width": "10%", "display": "inline-block", "position": "relative"},
             className="div1",
         ),
         html.Div(
