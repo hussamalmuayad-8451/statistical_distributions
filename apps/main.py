@@ -12,6 +12,7 @@ normal  = namedtuple("normal","N mean standard_deviation")
 poisson = namedtuple("poisson","N mean")
 binomial= namedtuple("binomial","N n p")  
 
+#---------------------------------------------------------------- main plots
 @app.callback(
     [Output("normal","hidden"),
      Output("poisson","hidden"),
@@ -129,13 +130,18 @@ def update_scatter(*args):
     return {"data": [scatter], "layout": my_layout}
 
 
-#@app.callback(
-#            Output("N_display","children"),
-#            [Input("N","value")]
-#            )
-#def n_display(value):
-#    return str(value)
 
+
+
+@app.callback(
+            Output("compare_plots_menu","hidden"),
+            [Input("onoff","value")]
+            )
+def reveal_compare_plots(value):
+    if value=="Off":
+        return True
+    else:
+        return False
 
 @app.callback(
             Output("compare_plots","hidden"),
@@ -146,6 +152,135 @@ def reveal_compare_plots(value):
         return True
     else:
         return False
+
+#---------------------------------------------------------------- comparison plots
+@app.callback(
+    [Output("normal_c","hidden"),
+     Output("poisson_c","hidden"),
+     Output("binomial_c","hidden")],
+     [Input("distribution_name_c","value")]
+)
+def display_parameters_c(value):
+    if value == "normal_c":
+        return (False, True, True)
+    elif value == "poisson_c":
+        return (True, False, True)
+    elif value == "binomial_c":
+        return (True, True, False)
+    else:
+        return (False, True, True)
+
+@app.callback(
+    Output("parameter_registry_c","children"),    
+    [Input("distribution_name_c","value"),        #args[0]
+     Input("N_c","value"),                        #args[1]
+     Input("mean_c","value"),                     #args[2]
+     Input("standard_deviation_c","value"),       #args[3]
+     Input("lambda_c","value"),                   #args[4]
+     Input("n_c","value"),                        #args[5]
+     Input("p_c","value")]                        #args[6]
+)   
+def registry_updater(*args):
+    if args[0]=="normal_c":
+        normal_parameters=normal._make([args[1], args[2], args[3]])
+        return normal_parameters
+    elif args[0]=="poisson_c":
+        poisson_parameters=poisson._make([args[1], args[4]]) 
+        return poisson_parameters
+    elif args[0]=="binomial_c":
+        binomial_parameters=binomial._make([args[1], args[5], args[6]])
+        return binomial_parameters
+    else:
+        normal_parameters=normal._make([args[1], args[2], args[3]])
+        return normal_parameters
+
+
+@app.callback(
+            Output("histogram_c","figure"),
+            [Input("distribution_name_c","value"),
+             Input("parameter_registry_c","children"),
+             Input("bins","value")]
+            )
+def update_histogram(*args):
+    distribution_name, parameters, bins = args
+    #print(distribution_name, parameters)
+    if distribution_name=="normal_c":
+        random_var = np.random.normal(loc=parameters[1], scale=parameters[2], size=parameters[0])
+    elif distribution_name=="poisson_c":
+        random_var = np.random.poisson(lam=parameters[1], size=parameters[0])
+    elif distribution_name=="binomial_c":
+        random_var = np.random.binomial(n=parameters[1], p=parameters[2], size=parameters[0])
+    else:
+        random_var = np.random.normal(loc=parameters[1], scale=parameters[2], size=parameters[0]) 
+
+    
+    histogram = go.Histogram(
+        {
+            "x": random_var,
+            "nbinsx": bins,
+            "histnorm": "percent",
+            "xbins": {"start": 0, "size": 10},
+            "autobinx": True,
+            "marker": {"color": "#ff8533"},  # EB89B5
+            "opacity": 0.75,
+        })
+    my_layout = {
+        "title": "histogram normal distribution",
+        "xaxis": {"title": "Z"},
+        "yaxis": {"title": "Probability"},
+        "autosize": "False",
+        "height"    : "450",
+        "width"     : "515",
+        "showlegend": False
+    }
+
+    return {"data": [histogram], "layout": my_layout}
+
+
+@app.callback(
+            Output("scatter_c","figure"),
+            [Input("distribution_name_c","value"),
+             Input("parameter_registry_c","children")]
+            )
+def update_scatter(*args):
+    distribution_name, parameters = args
+    if distribution_name=="normal_c":
+        random_var = np.random.normal(loc=parameters[1], scale=parameters[2], size=parameters[0])
+    elif distribution_name=="poisson_c":
+        random_var = np.random.poisson(lam=parameters[1], size=parameters[0])
+    elif distribution_name=="binomial_c":
+        random_var = np.random.binomial(n=parameters[1], p=parameters[2], size=parameters[0])
+    else:
+        random_var = np.random.normal(loc=parameters[1], scale=parameters[2], size=parameters[0]) 
+    
+    scatter = go.Scatter(
+        {
+            "y": random_var,
+            "opacity": 0.75,
+            "mode":"markers"
+        })
+    my_layout = {
+        "title": "distribution scatter plot",
+        "xaxis": {"title": "probability"},
+        "yaxis": {"title": "Percent"},
+        "autosize": "False",
+        "height"    : "450",
+        "width"     : "515",
+        "showlegend": False
+    }
+
+    return {"data": [scatter], "layout": my_layout}
+
+
+
+
+
+#@app.callback(
+#            Output("N_display","children"),
+#            [Input("N","value")]
+#            )
+#def n_display(value):
+#    return str(value)
 
 
 
