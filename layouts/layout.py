@@ -3,83 +3,29 @@ import dash_html_components as html
 import dash_table as dt
 import plotly.figure_factory as ff
 from collections import namedtuple
+from layouts.parameters import distribution_parameters, distribution_parameters_c
 
 available_distributions = [
     "normal",
     "poisson",
     "binomial",
-]  # ,"student T","negative binomial"]
-
-
-##----------------------------------------------------------------
-## distribution parameters
-##----------------------------------------------------------------
-distribution_parameters = [
-    html.Div(
-        id="normal",
-        hidden=False,
-        children=[
-            html.Div(children="Mean"),
-            dcc.Input(id="mean", type="number", value=0),
-            html.Div(children="Standard deviation"),
-            dcc.Input(id="standard_deviation", type="number", value=1),
-        ],
-    ),
-    html.Div(
-        id="poisson",
-        hidden=True,
-        children=[
-            html.Div(children="lambda"),
-            dcc.Input(id="lambda", type="number", value=1),
-        ],
-    ),
-    html.Div(
-        id="binomial",
-        hidden=True,
-        children=[
-            html.Div(children="n (bernoulli trial)", style={"font-style": "italic"}),
-            dcc.Input(id="n", type="number", value=10),
-            html.Div(
-                children="p (probability of success)", style={"font-style": "italic"}
-            ),
-            dcc.Input(id="p", type="number", value=0.5),
-        ],
-    ),
+    "negative binomial",
+    "student T",
+    "uniform",
+    "beta",
+    "chi square",
+    "exponential",
+    "f",
+    "gamma",
+    "gumbel",
+    "lognormal",
+    "cauchy",
+    "vonmises",
+    "wald",
+    "weibull"
 ]
 
-
-distribution_parameters_c = [
-    html.Div(
-        id="normal_c",
-        hidden=False,
-        children=[
-            html.Div(children="Mean"),
-            dcc.Input(id="mean_c", type="number", value=0),
-            html.Div(children="Standard deviation"),
-            dcc.Input(id="standard_deviation_c", type="number", value=1),
-        ],
-    ),
-    html.Div(
-        id="poisson_c",
-        hidden=True,
-        children=[
-            html.Div(children="lambda"),
-            dcc.Input(id="lambda_c", type="number", value=1),
-        ],
-    ),
-    html.Div(
-        id="binomial_c",
-        hidden=True,
-        children=[
-            html.Div(children="n (bernoulli trial)", style={"font-style": "italic"}),
-            dcc.Input(id="n_c", type="number", value=10),
-            html.Div(
-                children="p (probability of success)", style={"font-style": "italic"}
-            ),
-            dcc.Input(id="p_c", type="number", value=0.5),
-        ],
-    ),
-]
+available_distributions_c = [i+"_c" for i in available_distributions]
 
 
 ##----------------------------------------------------------------
@@ -207,7 +153,6 @@ page_1 = html.Div(
                             children=html.Div(
                                 [
                                     html.H6("N observations"),
-                                    # dcc.Input(id="N",type="number", value=5000),
                                     dcc.Slider(
                                         id="N_c",
                                         min=200,
@@ -226,12 +171,12 @@ page_1 = html.Div(
                                                 id="distribution_name_c",
                                                 options=[
                                                     {
-                                                        "label": i.capitalize(),
+                                                        "label": i.split("_")[0].capitalize(),
                                                         "value": i,
                                                     }
-                                                    for i in available_distributions
+                                                    for i in available_distributions_c
                                                 ],
-                                                value="normal",
+                                                value="normal_c",
                                                 clearable=False,
                                             ),
                                             html.Div(distribution_parameters_c),
