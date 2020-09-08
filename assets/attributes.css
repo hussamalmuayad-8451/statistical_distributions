@@ -14,9 +14,9 @@ body {
   -moz-box-sizing: border-box;
 }
 .page {
-  position: relative;
-  width: 11in;
-  min-height: 8.5in;
+  orientation: landscape;
+  width: 8.5in;
+  min-height: 11in;
   margin: 5px;
   /* border: 1px #D3D3D3 solid; */
   border-radius: 5px;
