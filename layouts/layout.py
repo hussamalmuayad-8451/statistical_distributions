@@ -62,7 +62,7 @@ compare_plots = [  # -----------------------------------------------------------
 page_1 = html.Div(
     [
         html.Div(
-            [html.H1(children="ENTER TITLE HERE")], style={"vertical-align": "top"}
+            [html.H1(children="Statistical Distributions")], className="title", style={"vertical-align": "top"}
         ),
         html.Div(
             [
@@ -113,6 +113,8 @@ page_1 = html.Div(
             ],
             style={"vertical-align": "top"},
         ),
+    html.Div([html.Div(children="created by")], className="footer_a"),
+    html.Div([html.Div(children="Hussam Almuayad")], className="footer_b")
     ],
-    # className="page"
+     className="page"
 )

@@ -374,6 +374,15 @@ distribution_parameters_c = [
 left_menu=[
             html.Div(
                 [
+                    html.H6("Bins"),
+                    dcc.Slider(
+                        id="bins",
+                        min=10,
+                        max=200,
+                        value=10,
+                        step=10,
+                        marks={i: f"{str(i)}" for i in range(10, 180, 30)},
+                    ),
                     html.H6("N observations"),
                     dcc.Slider(
                         id="N",
@@ -384,15 +393,6 @@ left_menu=[
                         marks={
                             i: f"{str(i)}" for i in range(1000, 10000, 1000)
                         },
-                    ),
-                    html.H6("Bins"),
-                    dcc.Slider(
-                        id="bins",
-                        min=10,
-                        max=160,
-                        value=10,
-                        step=10,
-                        marks={i: f"{str(i)}" for i in range(10, 180, 30)},
                     ),
                     html.Div(
                         [
@@ -474,5 +474,6 @@ left_menu=[
                         ),
                     ]
                 ),
+            
             ),
         ]

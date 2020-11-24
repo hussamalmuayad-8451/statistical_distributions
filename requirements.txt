@@ -1,0 +1,10 @@
+certifi
+dash
+dash-core-components
+dash-html-components
+dash-renderer
+dash-table
+Flask
+numpy
+pandas
+plotly

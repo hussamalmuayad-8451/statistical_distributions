@@ -606,12 +606,12 @@ def update_histogram(*args):
         "showlegend": False,
     }
 
-    scatter_0 = go.Scatter({"y": random_var, "opacity": 0.75, "mode": "markers"})
+    scatter_0 = go.Scatter({"y": random_var.tolist(), "opacity": 0.75, "mode": "markers"})
 
     scatter_0_layout = {
         "title": f"Scatter Plot - {distribution_name.capitalize()} Distribution",
-        "xaxis": {"title": "probability"},
-        "yaxis": {"title": "Percent"},
+        "xaxis": {"title": "Index"},
+        "yaxis": {"title": "Value"},
         "height": "450",
         "autosize": False,
         "showlegend": False,
@@ -1046,7 +1046,7 @@ def registry_updater(*args):
     elif args[0] == "poisson":
         poisson_parameters = poisson._make([args[1], args[4]])
         return poisson_parameters
-    elif args[0] == "binomia":
+    elif args[0] == "binomial":
         binomial_parameters = binomial._make([args[1], args[5], args[6]])
         return binomial_parameters
     elif args[0] == "negative binomial":
@@ -1189,11 +1189,11 @@ def update_histogram_c(*args):
         "autosize": False,
         "showlegend": False,
     }
-    scatter_1 = go.Scatter({"y": random_var, "opacity": 0.75, "mode": "markers"})
+    scatter_1 = go.Scatter({"y": random_var.tolist(), "opacity": 0.75, "mode": "markers"})
     scatter_1_layout = {
         "title": f"Scatter Plot - {distribution_name.capitalize()} Distribution",
-        "xaxis": {"title": "probability"},
-        "yaxis": {"title": "Percent"},
+        "xaxis": {"title": "Index"},
+        "yaxis": {"title": "Value"},
         "height": "450",
         "autosize": True,
         "showlegend": False,
