@@ -24,6 +24,6 @@ Weibull
 
 &nbsp;
 
-![opt_contents](https://github.com/drosophila/statistical_distributions/blob/master/docs/static/sample_01.png)
+![opt_contents](https://github.com/drosophila/statistical_distributions/blob/master/docs/static/sample_01.PNG)
 
 &nbsp;
