@@ -3,6 +3,7 @@ import dash_html_components as html
 import dash_table as dt
 import plotly.figure_factory as ff
 from collections import namedtuple
+import copy
 
 available_distributions = [
     "normal",
@@ -24,7 +25,7 @@ available_distributions = [
     "weibull",
 ]
 
-available_distributions_c = [i + "_c" for i in available_distributions]
+#available_distributions_c = copy.copy(available_distributions)
 
 
 ##----------------------------------------------------------------
@@ -236,7 +237,7 @@ distribution_parameters_c = [
         hidden=True,
         children=[
             html.Div(
-                children="r (failures before success)", style={"font-style": "italic"}
+                children="r (failures beforee success)", style={"font-style": "italic"}
             ),
             dcc.Input(id="r_c", type="number", value=5, min=0, step=1),
             html.Div(
@@ -377,7 +378,7 @@ left_menu=[
                     dcc.Slider(
                         id="N",
                         min=200,
-                        max=4000,
+                        max=3000,
                         value=1500,
                         step=200,
                         marks={
@@ -439,8 +440,8 @@ left_menu=[
                         dcc.Slider(
                             id="N_c",
                             min=200,
-                            max=9000,
-                            value=5000,
+                            max=3000,
+                            value=1500,
                             step=200,
                             marks={
                                 i: f"{str(i)}"
@@ -459,9 +460,9 @@ left_menu=[
                                             ].capitalize(),
                                             "value": i,
                                         }
-                                        for i in available_distributions_c
+                                        for i in available_distributions
                                     ],
-                                    value="normal_c",
+                                    value="normal",
                                     clearable=False,
                                 ),
                                 html.Div(distribution_parameters_c),

@@ -477,7 +477,7 @@ def registry_updater(*args):
     elif args[0] == "beta":
         beta_parameters = beta._make([args[1], args[12], args[13]])
         return beta_parameters
-    elif args[0] == "chisq":
+    elif args[0] == "chi square":
         chisq_parameters = chisq._make([args[1], args[14]])
         return chisq_parameters
     elif args[0] == "exponential":
@@ -513,7 +513,7 @@ def registry_updater(*args):
 
 
 @app.callback(
-    Output("histogram", "figure"),
+    [Output("histogram", "figure"), Output("scatter", "figure")],
     [
         Input("distribution_name", "value"),
         Input("parameter_registry", "children"),
@@ -522,6 +522,7 @@ def registry_updater(*args):
 )
 def update_histogram(*args):
     distribution_name, parameters, bins = args
+
     if distribution_name == "normal":
         random_var = np.random.normal(
             loc=parameters[1], scale=parameters[2], size=parameters[0]
@@ -546,7 +547,7 @@ def update_histogram(*args):
         random_var = np.random.beta(
             a=parameters[1], b=parameters[2], size=parameters[0]
         )
-    elif distribution_name == "chisq":
+    elif distribution_name == "chi square":
         random_var = np.random.chisquare(df=parameters[1], size=parameters[0])
     elif distribution_name == "exponential":
         random_var = np.random.exponential(scale=parameters[1], size=parameters[0])
@@ -583,108 +584,43 @@ def update_histogram(*args):
             loc=parameters[1], scale=parameters[2], size=parameters[0]
         )
 
-    trace_0 = go.Histogram(
+    hist_0 = go.Histogram(
         {
             "x": random_var.tolist(),
             "nbinsx": bins,
-            "histnorm": "probability density",
-            "xbins": {"start": 0, "size": 10},
             "autobinx": True,
-            "marker": {"color": "#eb89b5",
-                        "line":{"width":1, "color":"MediumPurple",}
-                        },
+            "marker": {
+                "color": "#eb89b5",
+                "line": {"width": 1, "color": "MediumPurple",},
+            },
             "opacity": 0.75,
         }
     )
 
-    my_layout = {
+    hist_0_layout = {
         "title": f"Probability Density - {distribution_name.capitalize()} Distribution",
         "xaxis": {"title": "Z"},
         "yaxis": {"title": "Probability"},
+        "height": "450",
         "autosize": False,
         "showlegend": False,
     }
-  
-    return {"data":[trace_0], "layout":my_layout}
 
+    scatter_0 = go.Scatter({"y": random_var, "opacity": 0.75, "mode": "markers"})
 
-@app.callback(
-    Output("scatter", "figure"),
-    [Input("distribution_name", "value"), Input("parameter_registry", "children")],
-)
-def update_scatter(*args):
-    distribution_name, parameters = args
-    if distribution_name == "normal":
-        random_var = np.random.normal(
-            loc=parameters[1], scale=parameters[2], size=parameters[0]
-        )
-    elif distribution_name == "poisson":
-        random_var = np.random.poisson(lam=parameters[1], size=parameters[0])
-    elif distribution_name == "binomial":
-        random_var = np.random.binomial(
-            n=parameters[1], p=parameters[2], size=parameters[0]
-        )
-    elif distribution_name == "negative binomial":
-        random_var = np.random.negative_binomial(
-            n=parameters[1], p=parameters[2], size=parameters[0]
-        )
-    elif distribution_name == "student T":
-        random_var = np.random.standard_t(df=parameters[1], size=parameters[0])
-    elif distribution_name == "uniform":
-        random_var = np.random.uniform(
-            low=parameters[1], high=parameters[2], size=parameters[0]
-        )
-    elif distribution_name == "beta":
-        random_var = np.random.beta(
-            a=parameters[1], b=parameters[2], size=parameters[0]
-        )
-    elif distribution_name == "chisq":
-        random_var = np.random.chisquare(df=parameters[1], size=parameters[0])
-    elif distribution_name == "exponential":
-        random_var = np.random.exponential(scale=parameters[1], size=parameters[0])
-    elif distribution_name == "f":
-        random_var = np.random.f(
-            dfnum=parameters[1], dfden=parameters[2], size=parameters[0]
-        )
-    elif distribution_name == "gamma":
-        random_var = np.random.gamma(
-            shape=parameters[1], scale=parameters[2], size=parameters[0]
-        )
-    elif distribution_name == "gumbel":
-        random_var = np.random.gumbel(
-            loc=parameters[1], scale=parameters[2], size=parameters[0]
-        )
-    elif distribution_name == "lognormal":
-        random_var = np.random.lognormal(
-            mean=parameters[1], sigma=parameters[2], size=parameters[0]
-        )
-    elif distribution_name == "cauchy":
-        random_var = np.random.standard_cauchy(size=parameters[0])
-    elif distribution_name == "vonmises":
-        random_var = np.random.vonmises(
-            mu=parameters[1], kappa=parameters[2], size=parameters[0]
-        )
-    elif distribution_name == "wald":
-        random_var = np.random.wald(
-            mean=parameters[1], scale=parameters[2], size=parameters[0]
-        )
-    elif distribution_name == "weibull":
-        random_var = np.random.weibull(a=parameters[1], size=parameters[0])
-    else:
-        random_var = np.random.normal(
-            loc=parameters[1], scale=parameters[2], size=parameters[0]
-        )
-
-    scatter = go.Scatter({"y": random_var, "opacity": 0.75, "mode": "markers"})
-    my_layout = {
+    scatter_0_layout = {
         "title": f"Scatter Plot - {distribution_name.capitalize()} Distribution",
         "xaxis": {"title": "probability"},
         "yaxis": {"title": "Percent"},
-        "autosize": "False",
+        "height": "450",
+        "autosize": False,
         "showlegend": False,
     }
 
-    return {"data": [scatter], "layout": my_layout}
+    return (
+        {"data": [hist_0], "layout": hist_0_layout},
+        {"data": [scatter_0], "layout": scatter_0_layout},
+    )
 
 
 @app.callback(Output("compare_plots_menu", "hidden"), [Input("onoff", "value")])
@@ -709,140 +645,561 @@ def reveal_compare_plots(value):
         Output("normal_c", "hidden"),
         Output("poisson_c", "hidden"),
         Output("binomial_c", "hidden"),
+        Output("nbinomial_c", "hidden"),
+        Output("student_c", "hidden"),
+        Output("uniform_c", "hidden"),
+        Output("beta_c", "hidden"),
+        Output("chisq_c", "hidden"),
+        Output("exponential_c", "hidden"),
+        Output("f_c", "hidden"),
+        Output("gamma_c", "hidden"),
+        Output("gumbel_c", "hidden"),
+        Output("lognormal_c", "hidden"),
+        Output("cauchy_c", "hidden"),
+        Output("vonmises_c", "hidden"),
+        Output("wald_c", "hidden"),
+        Output("weibull_c", "hidden"),
     ],
     [Input("distribution_name_c", "value")],
 )
 def display_parameters_c(value):
-    if value == "normal_c":
-        return (False, True, True)
-    elif value == "poisson_c":
-        return (True, False, True)
-    elif value == "binomial_c":
-        return (True, True, False)
+    if value == "normal":
+        return (
+            False,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+        )
+    elif value == "poisson":
+        return (
+            True,
+            False,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+        )
+    elif value == "binomial":
+        return (
+            True,
+            True,
+            False,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+        )
+    elif value == "negative binomial":
+        return (
+            True,
+            True,
+            True,
+            False,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+        )
+    elif value == "student T":
+        return (
+            True,
+            True,
+            True,
+            True,
+            False,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+        )
+    elif value == "uniform":
+        return (
+            True,
+            True,
+            True,
+            True,
+            True,
+            False,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+        )
+    elif value == "beta":
+        return (
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            False,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+        )
+    elif value == "chi square":
+        return (
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            False,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+        )
+    elif value == "exponential":
+        return (
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            False,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+        )
+    elif value == "f":
+        return (
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            False,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+        )
+    elif value == "gamma":
+        return (
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            False,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+        )
+    elif value == "gumbel":
+        return (
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            False,
+            True,
+            True,
+            True,
+            True,
+            True,
+        )
+    elif value == "lognormal":
+        return (
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            False,
+            True,
+            True,
+            True,
+            True,
+        )
+    elif value == "cauchy":
+        return (
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            False,
+            True,
+            True,
+            True,
+        )
+    elif value == "vonmises":
+        return (
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            False,
+            True,
+            True,
+        )
+    elif value == "wald":
+        return (
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            False,
+            True,
+        )
     else:
-        return (False, True, True)
+        return (
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            False,
+        )
 
 
 @app.callback(
     Output("parameter_registry_c", "children"),
     [
         Input("distribution_name_c", "value"),  # args[0]
-        Input("N_c", "value"),  # args[1]
-        Input("mean_c", "value"),  # args[2]
-        Input("standard_deviation_c", "value"),  # args[3]
-        Input("lambda_c", "value"),  # args[4]
-        Input("n_c", "value"),  # args[5]
-        Input("p_c", "value"),
-    ],  # args[6]
+        Input("N_c", "value"),  # args[1] normal
+        Input("mean_c", "value"),  # args[2] normal
+        Input("standard_deviation_c", "value"),  # args[3] normal
+        Input("lambda_c", "value"),  # args[4] poisson
+        Input("n_c", "value"),  # args[5] binomial
+        Input("p_c", "value"),  # args[6] binomail
+        Input("r_c", "value"),  # args[7] nbinomail
+        Input("p_c", "value"),  # args[8] nbinomail
+        Input("df_c", "value"),  # args[9] studentt
+        Input("alpha_c", "value"),  # args[10] uniform
+        Input("beta_c", "value"),  # args[11] uniform
+        Input("alpha_c", "value"),  # args[12] beta
+        Input("beta_c", "value"),  # args[13] beta
+        Input("df_c", "value"),  # args[14] chisq
+        Input("lambda_c", "value"),  # args[15] exponential
+        Input("df_1_c", "value"),  # args[16] f
+        Input("df_2_c", "value"),  # args[17] f
+        Input("kappa_c", "value"),  # args[18] gamma
+        Input("theta_c", "value"),  # args[19] gamma
+        Input("mean_c", "value"),  # args[20] gumbel
+        Input("beta_c", "value"),  # args[21] gumbel
+        Input("mean_c", "value"),  # args[22] lognormal
+        Input("standard_deviation_c", "value"),  # args[23] lognormal
+        Input("mean_c", "value"),  # args[24] vonmises
+        Input("kappa_c", "value"),  # args[25] vonmises
+        Input("mean_c", "value"),  # args[26] wald
+        Input("lambda_c", "value"),  # args[27] wald
+        Input("lambda_c", "value"),  # args[28] weibull
+    ],
 )
 def registry_updater(*args):
-    if args[0] == "normal_c":
+    if args[0] == "normal":
         normal_parameters = normal._make([args[1], args[2], args[3]])
         return normal_parameters
-    elif args[0] == "poisson_c":
+    elif args[0] == "poisson":
         poisson_parameters = poisson._make([args[1], args[4]])
         return poisson_parameters
-    elif args[0] == "binomial_c":
+    elif args[0] == "binomia":
         binomial_parameters = binomial._make([args[1], args[5], args[6]])
         return binomial_parameters
+    elif args[0] == "negative binomial":
+        nbinomial_parameters = nbinomial._make([args[1], args[7], args[8]])
+        return nbinomial_parameters
+    elif args[0] == "student T":
+        student_parameters = student._make([args[1], args[9]])
+        return student_parameters
+    elif args[0] == "uniform":
+        uniform_parameters = uniform._make([args[1], args[10], args[11]])
+        return uniform_parameters
+    elif args[0] == "beta":
+        beta_parameters = beta._make([args[1], args[12], args[13]])
+        return beta_parameters
+    elif args[0] == "chi square":
+        chisq_parameters = chisq._make([args[1], args[14]])
+        return chisq_parameters
+    elif args[0] == "exponential":
+        exponential_parameters = exponential._make([args[1], args[15]])
+        return exponential_parameters
+    elif args[0] == "f":
+        f_parameters = f._make([args[1], args[16], args[17]])
+        return f_parameters
+    elif args[0] == "gamma":
+        gamma_parameters = gamma._make([args[1], args[18], args[19]])
+        return gamma_parameters
+    elif args[0] == "gumbel":
+        gumbel_parameters = gumbel._make([args[1], args[20], args[21]])
+        return gumbel_parameters
+    elif args[0] == "lognormal":
+        lognormal_parameters = lognormal._make([args[1], args[22], args[23]])
+        return lognormal_parameters
+    elif args[0] == "cauchy":
+        cauchy_parameters = cauchy._make([args[1]])
+        return cauchy_parameters
+    elif args[0] == "vonmises":
+        vonmises_parameters = vonmises._make([args[1], args[24], args[25]])
+        return vonmises_parameters
+    elif args[0] == "wald":
+        wald_parameters = wald._make([args[1], args[26], args[27]])
+        return wald_parameters
+    elif args[0] == "weibull":
+        weibull_parameters = weibull._make([args[1], args[28]])
+        return weibull_parameters
     else:
         normal_parameters = normal._make([args[1], args[2], args[3]])
         return normal_parameters
 
 
 @app.callback(
-    Output("histogram_c", "figure"),
+    [Output("histogram_c", "figure"), Output("scatter_c", "figure")],
     [
         Input("distribution_name_c", "value"),
         Input("parameter_registry_c", "children"),
         Input("bins", "value"),
     ],
 )
-def update_histogram(*args):
+def update_histogram_c(*args):
     distribution_name, parameters, bins = args
-    # print(distribution_name, parameters)
-    if distribution_name == "normal_c":
+
+    if distribution_name == "normal":
         random_var = np.random.normal(
             loc=parameters[1], scale=parameters[2], size=parameters[0]
         )
-    elif distribution_name == "poisson_c":
+    elif distribution_name == "poisson":
         random_var = np.random.poisson(lam=parameters[1], size=parameters[0])
-    elif distribution_name == "binomial_c":
+    elif distribution_name == "binomial":
         random_var = np.random.binomial(
             n=parameters[1], p=parameters[2], size=parameters[0]
         )
+    elif distribution_name == "negative binomial":
+        random_var = np.random.negative_binomial(
+            n=parameters[1], p=parameters[2], size=parameters[0]
+        )
+    elif distribution_name == "student T":
+        random_var = np.random.standard_t(df=parameters[1], size=parameters[0])
+    elif distribution_name == "uniform":
+        random_var = np.random.uniform(
+            low=parameters[1], high=parameters[2], size=parameters[0]
+        )
+    elif distribution_name == "beta":
+        random_var = np.random.beta(
+            a=parameters[1], b=parameters[2], size=parameters[0]
+        )
+    elif distribution_name == "chi square":
+        random_var = np.random.chisquare(df=parameters[1], size=parameters[0])
+    elif distribution_name == "exponential":
+        random_var = np.random.exponential(scale=parameters[1], size=parameters[0])
+    elif distribution_name == "f":
+        random_var = np.random.f(
+            dfnum=parameters[1], dfden=parameters[2], size=parameters[0]
+        )
+    elif distribution_name == "gamma":
+        random_var = np.random.gamma(
+            shape=parameters[1], scale=parameters[2], size=parameters[0]
+        )
+    elif distribution_name == "gumbel":
+        random_var = np.random.gumbel(
+            loc=parameters[1], scale=parameters[2], size=parameters[0]
+        )
+    elif distribution_name == "lognormal":
+        random_var = np.random.lognormal(
+            mean=parameters[1], sigma=parameters[2], size=parameters[0]
+        )
+    elif distribution_name == "cauchy":
+        random_var = np.random.standard_cauchy(size=parameters[0])
+    elif distribution_name == "vonmises":
+        random_var = np.random.vonmises(
+            mu=parameters[1], kappa=parameters[2], size=parameters[0]
+        )
+    elif distribution_name == "wald":
+        random_var = np.random.wald(
+            mean=parameters[1], scale=parameters[2], size=parameters[0]
+        )
+    elif distribution_name == "weibull":
+        random_var = np.random.weibull(a=parameters[1], size=parameters[0])
     else:
         random_var = np.random.normal(
             loc=parameters[1], scale=parameters[2], size=parameters[0]
         )
 
-    histogram = go.Histogram(
+    hist_1 = go.Histogram(
         {
-            "x": random_var,
+            "x": random_var.tolist(),
             "nbinsx": bins,
-            "histnorm": "percent",
-            "xbins": {"start": 0, "size": 10},
             "autobinx": True,
-            "marker": {"color": "#ff8533"},  # EB89B5
+            "marker": {
+                "color": "#eb89b5",
+                "line": {"width": 1, "color": "MediumPurple",},
+            },
             "opacity": 0.75,
         }
     )
-    my_layout = {
-        "title": "histogram normal distribution",
+
+    hist_1_layout = {
+        "title": f"Probability Density - {distribution_name.capitalize()} Distribution",
         "xaxis": {"title": "Z"},
         "yaxis": {"title": "Probability"},
-        "autosize": "False",
         "height": "450",
-        "width": "515",
+        "autosize": False,
         "showlegend": False,
     }
-
-    return {"data": [histogram], "layout": my_layout}
-
-
-@app.callback(
-    Output("scatter_c", "figure"),
-    [Input("distribution_name_c", "value"), Input("parameter_registry_c", "children")],
-)
-def update_scatter(*args):
-    distribution_name, parameters = args
-    if distribution_name == "normal_c":
-        random_var = np.random.normal(
-            loc=parameters[1], scale=parameters[2], size=parameters[0]
-        )
-    elif distribution_name == "poisson_c":
-        random_var = np.random.poisson(lam=parameters[1], size=parameters[0])
-    elif distribution_name == "binomial_c":
-        random_var = np.random.binomial(
-            n=parameters[1], p=parameters[2], size=parameters[0]
-        )
-    else:
-        random_var = np.random.normal(
-            loc=parameters[1], scale=parameters[2], size=parameters[0]
-        )
-
-    scatter = go.Scatter({"y": random_var, "opacity": 0.75, "mode": "markers"})
-    my_layout = {
-        "title": "distribution scatter plot",
+    scatter_1 = go.Scatter({"y": random_var, "opacity": 0.75, "mode": "markers"})
+    scatter_1_layout = {
+        "title": f"Scatter Plot - {distribution_name.capitalize()} Distribution",
         "xaxis": {"title": "probability"},
         "yaxis": {"title": "Percent"},
-        "autosize": "False",
         "height": "450",
-        "width": "515",
+        "autosize": True,
         "showlegend": False,
     }
 
-    return {"data": [scatter], "layout": my_layout}
-
-
-# @app.callback(
-#            Output("N_display","children"),
-#            [Input("N","value")]
-#            )
-# def n_display(value):
-#    return str(value)
-
-
-# numpy.random.randint  uniform
-# numpy.random.binomial
-# numpy.random.beta(a, b, size=None)
+    return (
+        {"data": [hist_1], "layout": hist_1_layout},
+        {"data": [scatter_1], "layout": scatter_1_layout},
+    )

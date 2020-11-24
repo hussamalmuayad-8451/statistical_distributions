@@ -85,7 +85,7 @@ page_1 = html.Div(
                 html.Div(
                     main_plots,
                     style={
-                        "width": "35%",
+                        "width": "40%",
                         "display": "inline-block",
                         "position": "relative",
                     },
@@ -100,15 +100,14 @@ page_1 = html.Div(
                 html.Div(
                     [
                         html.Div(
-                            id="compare_plots",
-                            hidden=True,
-                            children=html.Div(compare_plots),
+                            id="compare_plots", hidden=True, children=compare_plots,
                         )
                     ],
                     style={
-                        "width": "35%",
+                        "width": "40%",
                         "display": "inline-block",
                         "position": "relative",
+                        "vertical-align": "top",
                     },
                 ),
             ],
