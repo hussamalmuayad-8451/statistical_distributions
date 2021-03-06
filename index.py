@@ -17,6 +17,8 @@ app.layout = html.Div([
 def display_page(pathname):
     if pathname == '/apps/distribution':
         return main.page_1
+    elif pathname == '/apps/joints':
+        return main.page_2
     else:
         return '404'
 

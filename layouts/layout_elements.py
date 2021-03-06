@@ -25,7 +25,7 @@ available_distributions = [
     "weibull",
 ]
 
-#available_distributions_c = copy.copy(available_distributions)
+# available_distributions_c = copy.copy(available_distributions)
 
 
 ##----------------------------------------------------------------
@@ -173,7 +173,9 @@ distribution_parameters = [
         children=[
             html.Div(children="Mean", style={"font-style": "italic"}),
             dcc.Input(id="mean", type="number", value=0),
-            html.Div(children=f"{chr(952)} (concentration)", style={"font-style": "italic"}),
+            html.Div(
+                children=f"{chr(952)} (concentration)", style={"font-style": "italic"}
+            ),
             dcc.Input(id="kappa", type="number", value=1, min=1, step=0.5),
         ],
     ),
@@ -343,7 +345,9 @@ distribution_parameters_c = [
         children=[
             html.Div(children="Mean", style={"font-style": "italic"}),
             dcc.Input(id="mean_c", type="number", value=0),
-            html.Div(children=f"{chr(952)} (concentration)", style={"font-style": "italic"}),
+            html.Div(
+                children=f"{chr(952)} (concentration)", style={"font-style": "italic"}
+            ),
             dcc.Input(id="kappa", type="number", value=1, min=1, step=0.5),
         ],
     ),
@@ -371,109 +375,244 @@ distribution_parameters_c = [
 ##----------------------------------------------------------------
 ## left_menu
 ##----------------------------------------------------------------
-left_menu=[
-            html.Div(
-                [
-                    html.H6("Bins"),
-                    dcc.Slider(
-                        id="bins",
-                        min=10,
-                        max=200,
-                        value=10,
-                        step=10,
-                        marks={i: f"{str(i)}" for i in range(10, 180, 30)},
-                    ),
-                    html.H6("N observations"),
-                    dcc.Slider(
-                        id="N",
-                        min=200,
-                        max=3000,
-                        value=1500,
-                        step=200,
-                        marks={
-                            i: f"{str(i)}" for i in range(1000, 10000, 1000)
-                        },
-                    ),
-                    html.Div(
-                        [
-                            dcc.Dropdown(
-                                id="distribution_name",
-                                options=[
-                                    {"label": i.capitalize(), "value": i}
-                                    for i in available_distributions
-                                ],
-                                value="normal",
-                                clearable=False,
-                            ),
-                            html.Div(distribution_parameters),
-                            html.Div(id="parameter_registry", hidden=True),
-                        ],
-                        style={"font-size": 14, "margin-top": "20px"},
-                    ),
-                ],
+left_menu = [
+    html.Div(
+        [
+            html.H6("Bins"),
+            dcc.Slider(
+                id="bins",
+                min=10,
+                max=200,
+                value=10,
+                step=10,
+                marks={i: f"{str(i)}" for i in [10, 50, 100, 150, 200]},
             ),
-            html.Div(
-                [],
-                # -------------------------------------------------------------------------- div2 left on-off separator
-                className="top_spacer",
+            html.H6("N observations"),
+            dcc.Slider(
+                id="N",
+                min=200,
+                max=3000,
+                value=1500,
+                step=200,
+                marks={i: f"{str(i)}" for i in [200, 500, 1000, 2000, 3000]},
             ),
             html.Div(
                 [
-                    dcc.RadioItems(
-                        id="onoff",
-                        labelStyle={"display": "inline-block"},
+                    dcc.Dropdown(
+                        id="distribution_name",
                         options=[
-                            {"label": "On", "value": "On"},
-                            {"label": "Off", "value": "Off"},
+                            {"label": i.capitalize(), "value": i}
+                            for i in available_distributions
                         ],
-                        value="Off",
-                    )
+                        value="normal",
+                        clearable=False,
+                    ),
+                    html.Div(distribution_parameters),
+                    html.Div(id="parameter_registry", hidden=True),
                 ],
-                # -------------------------------------------------------------------------- div2 toggle on separator
+                style={"font-size": 14, "margin-top": "20px"},
+            ),
+        ],
+    ),
+    html.Div(
+        [],
+        # -------------------------------------------------------------------------- div2 left on-off separator
+        className="top_spacer",
+    ),
+    html.Div(
+        [dcc.Checklist(id="onoff", options=[{"label": " COMPARE", "value": "Yes"},])]
+    ),
+    html.Div(
+        id="compare_plots_menu",
+        hidden=True,
+        children=html.Div(
+            [
+                html.H6("N observations"),
+                dcc.Slider(
+                    id="N_c",
+                    min=200,
+                    max=3000,
+                    value=1500,
+                    step=200,
+                    marks={i: f"{str(i)}" for i in [200, 500, 1000, 2000, 3000]},
+                ),
+                html.Div(
+                    # -------------------------------------------------------------------spacer div
+                    [
+                        dcc.Dropdown(
+                            id="distribution_name_c",
+                            options=[
+                                {"label": i.split("_")[0].capitalize(), "value": i,}
+                                for i in available_distributions
+                            ],
+                            value="normal",
+                            clearable=False,
+                        ),
+                        html.Div(distribution_parameters_c),
+                        html.Div(id="parameter_registry_c", hidden=True),
+                    ],
+                    style={"font-size": 14, "margin-top": "20px"},
+                ),
+            ]
+        ),
+    ),
+]
+
+##----------------------------------------------------------------
+## left_menu joint
+##----------------------------------------------------------------
+left_menu_jnt = [
+    html.Div(
+        [
+            html.H6("Bins"),
+            dcc.Slider(
+                id="bins",
+                min=10,
+                max=200,
+                value=10,
+                step=10,
+                marks={i: f"{str(i)}" for i in [10, 50, 100, 150, 200]},
+            ),
+            html.H6("N observations"),
+            dcc.Slider(
+                id="N",
+                min=200,
+                max=3000,
+                value=1500,
+                step=200,
+                marks={i: f"{str(i)}" for i in [200, 500, 1000, 2000, 3000]},
             ),
             html.Div(
-                id="compare_plots_menu",
-                hidden=True,
-                children=html.Div(
-                    [
-                        html.H6("N observations"),
-                        dcc.Slider(
-                            id="N_c",
-                            min=200,
-                            max=3000,
-                            value=1500,
-                            step=200,
-                            marks={
-                                i: f"{str(i)}"
-                                for i in range(1000, 9000, 1000)
-                            },
-                        ),
-                        html.Div(
-                            # -------------------------------------------------------------------spacer div
-                            [
-                                dcc.Dropdown(
-                                    id="distribution_name_c",
-                                    options=[
-                                        {
-                                            "label": i.split("_")[
-                                                0
-                                            ].capitalize(),
-                                            "value": i,
-                                        }
-                                        for i in available_distributions
-                                    ],
-                                    value="normal",
-                                    clearable=False,
-                                ),
-                                html.Div(distribution_parameters_c),
-                                html.Div(
-                                    id="parameter_registry_c", hidden=True
-                                ),
-                            ],
-                            style={"font-size": 14, "margin-top": "20px"},
-                        ),
-                    ]
-                ),
-            
+                [
+                    dcc.Dropdown(
+                        id="distribution_name",
+                        options=[
+                            {"label": i.capitalize(), "value": i}
+                            for i in available_distributions
+                        ],
+                        value="normal",
+                        clearable=False,
+                    ),
+                    html.Div(distribution_parameters),
+                    html.Div(id="parameter_registry", hidden=True),
+                ],
+                style={"font-size": 14, "margin-top": "20px"},
             ),
-        ]
+        ],
+    ),
+    html.Div(
+        [],
+        # -------------------------------------------------------------------------- div2 left on-off separator
+        className="top_spacer",
+    ),
+    html.Div(
+            [
+                html.H6("N observations"),
+                dcc.Slider(
+                    id="N_c",
+                    min=200,
+                    max=3000,
+                    value=1500,
+                    step=200,
+                    marks={i: f"{str(i)}" for i in [200, 500, 1000, 2000, 3000]},
+                ),
+                html.Div(
+                    # -------------------------------------------------------------------spacer div
+                    [
+                        dcc.Dropdown(
+                            id="distribution_name_c",
+                            options=[
+                                {"label": i.split("_")[0].capitalize(), "value": i,}
+                                for i in available_distributions
+                            ],
+                            value="normal",
+                            clearable=False,
+                        ),
+                        html.Div(distribution_parameters_c),
+                        html.Div(id="parameter_registry_c", hidden=True),
+                    ],
+                    style={"font-size": 14, "margin-top": "20px"},
+                ),
+            ]
+        ),
+]
+
+##----------------------------------------------------------------
+## main_plots
+##----------------------------------------------------------------
+main_plots = [  # -------------------------------------------------------------------------- div2 main plots
+    html.Div(
+        [
+            dcc.Graph(id="histogram", config={"displayModeBar": False})
+        ],  # -------------------------------------------------------------------------- div2-top
+        style={"vertical-align": "top"},
+    ),
+    html.Div(
+        [],  # -------------------------------------------------------------------------- div2-separator
+        style={"vertical-aligh": "top"},
+    ),
+    html.Div(
+        # -------------------------------------------------------------------------- div2-bottom
+        [dcc.Graph(id="scatter", config={"displayModeBar": False})],
+        style={"vertical-aligh": "top"},
+    ),
+]
+
+
+##----------------------------------------------------------------
+## compare_plots
+##----------------------------------------------------------------
+
+compare_plots = [  # -------------------------------------------------------------------------- div1 compare plots open
+    html.Div(
+        [
+            dcc.Graph(id="histogram_c", config={"displayModeBar": False})
+        ],  # -------------------------------------------------------------------------- div2-top
+        style={"vertical-align": "top"},
+    ),
+    html.Div(
+        [],  # -------------------------------------------------------------------------- div2-separator
+        style={"vertical-aligh": "top"},
+    ),
+    html.Div(
+        # -------------------------------------------------------------------------- div2-bottom
+        [dcc.Graph(id="scatter_c", config={"displayModeBar": False})],
+        style={"vertical-aligh": "top"},
+    ),
+]
+
+##----------------------------------------------------------------
+## joint_plots
+##----------------------------------------------------------------
+
+joint_plots = [  # -------------------------------------------------------------------------- div1 compare plots open
+    html.Div(
+        [],  # -------------------------------------------------------------------------- div2-separator
+            style={
+                        "width": "3%",
+                        "display": "inline-block",
+                        "position": "relative",
+                        "vertical-align": "top",
+                    },
+    ),
+    html.Div(
+        [
+            dcc.Graph(id="3d_obj", config={"displayModeBar": False})
+        ],  # -------------------------------------------------------------------------- div2-top
+            style={
+                        "width": "92%",
+                        "display": "inline-block",
+                        "position": "relative",
+                        "vertical-align": "top",
+                    },
+    ),
+    html.Div(
+        [],  # -------------------------------------------------------------------------- div2-separator
+                    style={
+                        "width": "3%",
+                        "display": "inline-block",
+                        "position": "relative",
+                        "vertical-align": "top",
+                    },
+    )
+]

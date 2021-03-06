@@ -5,54 +5,13 @@ import plotly.figure_factory as ff
 from collections import namedtuple
 from layouts.layout_elements import (
     left_menu,
+    left_menu_jnt,
+    main_plots,
+    joint_plots,
+    compare_plots,
     distribution_parameters,
     distribution_parameters_c,
 )
-
-
-##----------------------------------------------------------------
-## main_plots
-##----------------------------------------------------------------
-main_plots = [  # -------------------------------------------------------------------------- div2 main plots
-    html.Div(
-        [
-            dcc.Graph(id="histogram", config={"displayModeBar": False})
-        ],  # -------------------------------------------------------------------------- div2-top
-        style={"vertical-align": "top"},
-    ),
-    html.Div(
-        [],  # -------------------------------------------------------------------------- div2-separator
-        style={"vertical-aligh": "top"},
-    ),
-    html.Div(
-        # -------------------------------------------------------------------------- div2-bottom
-        [dcc.Graph(id="scatter", config={"displayModeBar": False})],
-        style={"vertical-aligh": "top"},
-    ),
-]
-
-
-##----------------------------------------------------------------
-## compare_plots
-##----------------------------------------------------------------
-
-compare_plots = [  # -------------------------------------------------------------------------- div1 compare plots open
-    html.Div(
-        [
-            dcc.Graph(id="histogram_c", config={"displayModeBar": False})
-        ],  # -------------------------------------------------------------------------- div2-top
-        style={"vertical-align": "top"},
-    ),
-    html.Div(
-        [],  # -------------------------------------------------------------------------- div2-separator
-        style={"vertical-aligh": "top"},
-    ),
-    html.Div(
-        # -------------------------------------------------------------------------- div2-bottom
-        [dcc.Graph(id="scatter_c", config={"displayModeBar": False})],
-        style={"vertical-aligh": "top"},
-    ),
-]
 
 
 ##----------------------------------------------------------------
@@ -62,7 +21,9 @@ compare_plots = [  # -----------------------------------------------------------
 page_1 = html.Div(
     [
         html.Div(
-            [html.H1(children="Statistical Distributions")], className="title", style={"vertical-align": "top"}
+            [html.H1(children="Statistical Distributions")],
+            className="title",
+            style={"vertical-align": "top"},
         ),
         html.Div(
             [
@@ -113,8 +74,64 @@ page_1 = html.Div(
             ],
             style={"vertical-align": "top"},
         ),
-    html.Div([html.Div(children="created by")], className="footer_a"),
-    html.Div([html.Div(children="Hussam Almuayad")], className="footer_b")
+        html.Div([html.Div(children="created by")], className="footer_a"),
+        html.Div([html.Div(children="Hussam Almuayad")], className="footer_b"),
     ],
-     className="page"
+    className="page",
+)
+
+
+
+
+##----------------------------------------------------------------
+## main layout
+##----------------------------------------------------------------
+
+page_2 = html.Div(
+    [
+        html.Div(
+            [html.H1(children="Statistical Distributions")],
+            className="title",
+            style={"vertical-align": "top"},
+        ),
+        html.Div(
+            [
+                html.Div(
+                    left_menu_jnt,
+                    style={
+                        "width": "10%",
+                        "display": "inline-block",
+                        "position": "relative",
+                        "vertical-align": "top",
+                    },
+                ),
+                html.Div(
+                    style={
+                        "width": "1%",
+                        "display": "inline-block",
+                        "position": "relative",
+                    },
+                ),
+                html.Div(
+                    joint_plots,
+                    style={
+                        "width": "80%",
+                        "display": "inline-block",
+                        "position": "relative",
+                    },
+                ),
+                html.Div(
+                    style={
+                        "width": "1%",
+                        "display": "inline-block",
+                        "position": "relative",
+                    },
+                ),
+            ],
+            style={"vertical-align": "top"},
+        ),
+        html.Div([html.Div(children="created by")], className="footer_a"),
+        html.Div([html.Div(children="Hussam Almuayad")], className="footer_b"),
+    ],
+    className="page",
 )

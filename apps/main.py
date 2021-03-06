@@ -4,43 +4,9 @@ from collections import defaultdict
 import plotly.graph_objs as go
 import plotly.figure_factory as ff
 import numpy as np
-from layouts.layout import page_1
+from layouts.layout import page_1, page_2
 from app import app
-
-from collections import namedtuple
-
-# mean standard deviation
-normal = namedtuple("normal", "N mean standard_deviation")
-# lambda
-poisson = namedtuple("poisson", "N mean")
-# n bernouli trials p probability(0,1)
-binomial = namedtuple("binomial", "N n p")
-# r number of failures before a success >0, p probability of success (0,1)
-nbinomial = namedtuple("nbinomial", "N r p")
-# df degrees of freedom >0
-student = namedtuple("student", "N df")
-# a min, b max
-uniform = namedtuple("uniform", "N a b")
-# a shape >0, b shape>0
-beta = namedtuple("beta", "N a b")
-# df degrees of freedom >0
-chisq = namedtuple("chisq", "N k")
-# lambda > 0, mean=1/lambda
-exponential = namedtuple("exponential", "N lambda_")
-# df_1, df_2 of two chi square distributions
-f = namedtuple("f", "N df_1 df_2")
-# k shape > 0, theta scale > 0
-gamma = namedtuple("gamma", "N k theta")
-# mean, beta: scale > 0
-gumbel = namedtuple("gumbel", "N mean beta")
-lognormal = namedtuple("lognormal", "N mean standard_deviation")
-cauchy = namedtuple("cauchy", "N")
-# mean, kappa > 0
-vonmises = namedtuple("vonmises", "N mean kappa")
-# mean > 0 ,lambda (shape)> 0
-wald = namedtuple("wald", "N mean lambda_")
-# lambda scale > 0 kappa shape > 0
-weibull = namedtuple("weibull", "N lambda_")
+from apps.function import *
 
 
 @app.callback(Output("N", "value"), [Input("distribution_name", "value")])
@@ -53,7 +19,6 @@ def adjust_bins(value):
         return 30
     else:
         return 1500
-
 
 # ---------------------------------------------------------------- main plots
 @app.callback(
@@ -80,345 +45,39 @@ def adjust_bins(value):
 )
 def display_parameters(value):
     if value == "normal":
-        return (
-            False,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]]
     elif value == "poisson":
-        return (
-            True,
-            False,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]]
     elif value == "binomial":
-        return (
-            True,
-            True,
-            False,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1]]
     elif value == "negative binomial":
-        return (
-            True,
-            True,
-            True,
-            False,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1]]
     elif value == "student T":
-        return (
-            True,
-            True,
-            True,
-            True,
-            False,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1]]
     elif value == "uniform":
-        return (
-            True,
-            True,
-            True,
-            True,
-            True,
-            False,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1]]
     elif value == "beta":
-        return (
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            False,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1]]
     elif value == "chi square":
-        return (
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            False,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1]]
     elif value == "exponential":
-        return (
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            False,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1]]
     elif value == "f":
-        return (
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            False,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1]]
     elif value == "gamma":
-        return (
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            False,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1]]
     elif value == "gumbel":
-        return (
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            False,
-            True,
-            True,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1]]
     elif value == "lognormal":
-        return (
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            False,
-            True,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1]]
     elif value == "cauchy":
-        return (
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            False,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1]]
     elif value == "vonmises":
-        return (
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            False,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1]]
     elif value == "wald":
-        return (
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            False,
-            True,
-        )
+        return [bool(i) for i in [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1]]
     else:
-        return (
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            False,
-        )
+        return [bool(i) for i in [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0]]
 
 
 @app.callback(
@@ -511,7 +170,6 @@ def registry_updater(*args):
         normal_parameters = normal._make([args[1], args[2], args[3]])
         return normal_parameters
 
-
 @app.callback(
     [Output("histogram", "figure"), Output("scatter", "figure")],
     [
@@ -583,7 +241,7 @@ def update_histogram(*args):
         random_var = np.random.normal(
             loc=parameters[1], scale=parameters[2], size=parameters[0]
         )
-
+    #print(distribution_name, [i for i in random_var])
     hist_0 = go.Histogram(
         {
             "x": random_var.tolist(),
@@ -597,6 +255,13 @@ def update_histogram(*args):
         }
     )
 
+    dist_0 = ff.create_distplot(
+        hist_data = [random_var.tolist(),random_var.tolist()],
+        group_labels = ["histogram","distplot"],
+        colors=["rgb(51,63,68)", "rgb(22,255,156)"],
+        show_rug=False,
+        show_hist=True
+    )
     hist_0_layout = {
         "title": f"Probability Density - {distribution_name.capitalize()} Distribution",
         "xaxis": {"title": "Z"},
@@ -625,7 +290,7 @@ def update_histogram(*args):
 
 @app.callback(Output("compare_plots_menu", "hidden"), [Input("onoff", "value")])
 def reveal_compare_plots(value):
-    if value == "Off":
+    if (value == None or value == []):
         return True
     else:
         return False
@@ -633,7 +298,7 @@ def reveal_compare_plots(value):
 
 @app.callback(Output("compare_plots", "hidden"), [Input("onoff", "value")])
 def reveal_compare_plots(value):
-    if value == "Off":
+    if (value == None or value == []):
         return True
     else:
         return False
@@ -664,345 +329,39 @@ def reveal_compare_plots(value):
 )
 def display_parameters_c(value):
     if value == "normal":
-        return (
-            False,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]]
     elif value == "poisson":
-        return (
-            True,
-            False,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]]
     elif value == "binomial":
-        return (
-            True,
-            True,
-            False,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1]]
     elif value == "negative binomial":
-        return (
-            True,
-            True,
-            True,
-            False,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1]]
     elif value == "student T":
-        return (
-            True,
-            True,
-            True,
-            True,
-            False,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1]]
     elif value == "uniform":
-        return (
-            True,
-            True,
-            True,
-            True,
-            True,
-            False,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1]]
     elif value == "beta":
-        return (
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            False,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1]]
     elif value == "chi square":
-        return (
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            False,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1]]
     elif value == "exponential":
-        return (
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            False,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1]]
     elif value == "f":
-        return (
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            False,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1]]
     elif value == "gamma":
-        return (
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            False,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1]]
     elif value == "gumbel":
-        return (
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            False,
-            True,
-            True,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1]]
     elif value == "lognormal":
-        return (
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            False,
-            True,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1]]
     elif value == "cauchy":
-        return (
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            False,
-            True,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1]]
     elif value == "vonmises":
-        return (
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            False,
-            True,
-            True,
-        )
+        return [bool(i) for i in [1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1]]
     elif value == "wald":
-        return (
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            False,
-            True,
-        )
+        return [bool(i) for i in [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1]]
     else:
-        return (
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            False,
-        )
+        return [bool(i) for i in [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0]]
 
 
 @app.callback(
@@ -1094,8 +453,7 @@ def registry_updater(*args):
     else:
         normal_parameters = normal._make([args[1], args[2], args[3]])
         return normal_parameters
-
-
+        
 @app.callback(
     [Output("histogram_c", "figure"), Output("scatter_c", "figure")],
     [
