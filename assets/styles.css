@@ -1,0 +1,92 @@
+Header{
+    text-align:center;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-family: "roboto";
+}
+
+.left_menu{
+    margin-left: 15px;
+    width: 15%;
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+    background-color: #f9f9f3;
+    box-shadow: 2px 2px 2px lightgray;
+
+}
+
+#bins{
+    margin-bottom: 25px;
+    width: 85%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    
+}
+
+#N, #N_c{
+    margin-bottom: 35px;
+    width: 85%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+#distribution_name, #distribution_name_c{
+    width: 80%;
+    margin-left: 10px;
+    font-size: 6;
+}
+
+#onoff {
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-bottom: 30px;
+}
+.main_plots{
+    width: 40%;
+    margin-left: 25px;
+    display: inline-block;
+    position: relative;
+    background-color: #f9f9f9;
+    box-shadow: 2px 2px 2px lightgray;
+    border-radius: 10px;
+}
+
+.compare_plots{
+    width: 40%;
+    margin-left: 10px;
+    display: inline-block;
+    position: relative;
+    background: #f9f9f9;
+    box-shadow: 2px 2px 2px lightgray;
+    border-radius: 10px;
+}
+
+Footer{
+    margin-left: 10px;
+    text-align:left;
+    font-family: "roboto";
+    font-size: 10px;
+}
+
+#mean, #standard_deviation, #lambda, #n, #p, #r, #df, #alpha_, #beta_, #df_1, #df_2,
+#kappa, #theta{
+    width: 80%;
+    margin-top: 2px;
+    margin-left: 10px;
+}
+
+#mean_c, #standard_deviation_c, #lambda_c, #n_c, #p_c, #r_c, #df_c, #alpha_c, #beta_c, #df_1_c, #df_2_c,
+#kappa_c, #theta_c{
+    width: 80%;
+    margin-top: 2px;
+    margin-left: 10px;
+}
+
+#bottom_spacer{
+  min-height: 200px;
+  height: auto;
+  overflow: auto;
+}

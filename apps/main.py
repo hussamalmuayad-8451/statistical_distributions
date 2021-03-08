@@ -4,7 +4,7 @@ from collections import defaultdict
 import plotly.graph_objs as go
 import plotly.figure_factory as ff
 import numpy as np
-from layouts.layout import page_1, page_2
+from layouts.layout import page_1
 from app import app
 from apps.function import *
 
@@ -288,21 +288,12 @@ def update_histogram(*args):
     )
 
 
-@app.callback(Output("compare_plots_menu", "hidden"), [Input("onoff", "value")])
+@app.callback([Output("compare_plots_menu", "hidden"),Output("compare_plots", "hidden")], [Input("onoff", "value")])
 def reveal_compare_plots(value):
     if (value == None or value == []):
-        return True
+        return True, True
     else:
-        return False
-
-
-@app.callback(Output("compare_plots", "hidden"), [Input("onoff", "value")])
-def reveal_compare_plots(value):
-    if (value == None or value == []):
-        return True
-    else:
-        return False
-
+        return False, False
 
 # ---------------------------------------------------------------- comparison plots
 @app.callback(

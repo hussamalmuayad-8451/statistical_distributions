@@ -37,9 +37,9 @@ distribution_parameters = [
         id="normal",
         hidden=False,
         children=[
-            html.H6("Mean"),
+            html.Div(children="Mean"),
             dcc.Input(id="mean", type="number", value=0),
-            html.H6("Standard deviation"),
+            html.Div(children="Standard deviation"),
             dcc.Input(id="standard_deviation", type="number", value=1),
         ],
     ),
@@ -47,7 +47,7 @@ distribution_parameters = [
         id="poisson",
         hidden=True,
         children=[
-            html.H6("lambda"),
+            html.Div(children="lambda"),
             dcc.Input(id="lambda", type="number", value=1),
         ],
     ),
@@ -55,9 +55,11 @@ distribution_parameters = [
         id="binomial",
         hidden=True,
         children=[
-            html.H6("n (bernoulli trial)"),
+            html.Div(children="n (bernoulli trial)", style={"font-style": "italic"}),
             dcc.Input(id="n", type="number", value=10),
-            html.H6("p (probability of success)"),
+            html.Div(
+                children="p (probability of success)", style={"font-style": "italic"}
+            ),
             dcc.Input(id="p", type="number", value=0.5, min=0, max=1, step=0.1),
         ],
     ),
@@ -65,9 +67,13 @@ distribution_parameters = [
         id="nbinomial",
         hidden=True,
         children=[
-            html.H6("r (failures before success)"),
+            html.Div(
+                children="r (failures before success)", style={"font-style": "italic"}
+            ),
             dcc.Input(id="r", type="number", value=5, min=0, step=1),
-            html.H6("p (probability of success)"),
+            html.Div(
+                children="p (probability of success)", style={"font-style": "italic"}
+            ),
             dcc.Input(id="p", type="number", value=0.5, min=0, max=1, step=0.1),
         ],
     ),
@@ -75,7 +81,7 @@ distribution_parameters = [
         id="student",
         hidden=True,
         children=[
-            html.H6("Degreed of Freedom"),
+            html.Div(children="Degreed of Freedom", style={"font-style": "italic"}),
             dcc.Input(id="df", type="number", value=2, min=1, step=1),
         ],
     ),
@@ -83,9 +89,9 @@ distribution_parameters = [
         id="uniform",
         hidden=True,
         children=[
-            html.H6("Alpha"),
+            html.Div(children="Alpha", style={"font-style": "italic"}),
             dcc.Input(id="alpha_", type="number", value=0, step=1),
-            html.H6("Beta"),
+            html.Div(children="Beta", style={"font-style": "italic"}),
             dcc.Input(id="beta_", type="number", value=1, step=1),
         ],
     ),
@@ -93,9 +99,9 @@ distribution_parameters = [
         id="beta",
         hidden=True,
         children=[
-            html.H6(f"{chr(945)} (shape)"),
+            html.Div(children=f"{chr(945)} (shape)", style={"font-style": "italic"}),
             dcc.Input(id="alpha_", type="number", value=2, min=1, step=1),
-            html.H6(f"{chr(946)} (scale)"),
+            html.Div(children=f"{chr(946)} (scale)", style={"font-style": "italic"}),
             dcc.Input(id="beta_", type="number", value=3, min=1, step=1),
         ],
     ),
@@ -103,7 +109,7 @@ distribution_parameters = [
         id="chisq",
         hidden=True,
         children=[
-            html.H6("Degreed of Freedom"),
+            html.Div(children="Degreed of Freedom", style={"font-style": "italic"}),
             dcc.Input(id="df", type="number", value=2, min=1, step=1),
         ],
     ),
@@ -111,7 +117,7 @@ distribution_parameters = [
         id="exponential",
         hidden=True,
         children=[
-            html.H6("Lambda"),
+            html.Div(children="Lambda", style={"font-style": "italic"}),
             dcc.Input(id="lambda", type="number", value=3, min=1, step=0.1),
         ],
     ),
@@ -119,9 +125,9 @@ distribution_parameters = [
         id="f",
         hidden=True,
         children=[
-            html.H6("Degrees of Freedom 1"),
+            html.Div(children="Degrees of Freedom 1", style={"font-style": "italic"}),
             dcc.Input(id="df_1", type="number", value=5, min=1, step=1),
-            html.H6("Degrees of Freedom 2"),
+            html.Div(children="Degrees of Freedom 2", style={"font-style": "italic"}),
             dcc.Input(id="df_2", type="number", value=9, min=1, step=1),
         ],
     ),
@@ -129,9 +135,9 @@ distribution_parameters = [
         id="gamma",
         hidden=True,
         children=[
-            html.H6(f"{chr(952)} (shape)"),
+            html.Div(children=f"{chr(952)} (shape)", style={"font-style": "italic"}),
             dcc.Input(id="kappa", type="number", value=1, min=1, step=0.1),
-            html.H6(f"{chr(954)} (scale)"),
+            html.Div(children=f"{chr(954)} (scale)", style={"font-style": "italic"}),
             dcc.Input(id="theta", type="number", value=3, min=1, step=0.1),
         ],
     ),
@@ -139,9 +145,9 @@ distribution_parameters = [
         id="gumbel",
         hidden=True,
         children=[
-            html.H6("Mean"),
+            html.Div(children="Mean", style={"font-style": "italic"}),
             dcc.Input(id="mean", type="number", value=0),
-            html.H6(f"{chr(946)} (scale)"),
+            html.Div(children=f"{chr(946)} (scale)", style={"font-style": "italic"}),
             dcc.Input(id="beta_", type="number", value=2, min=0, step=0.1),
         ],
     ),
@@ -149,9 +155,9 @@ distribution_parameters = [
         id="lognormal",
         hidden=True,
         children=[
-            html.H6("Mean"),
+            html.Div(children="Mean"),
             dcc.Input(id="mean", type="number", value=0),
-            html.H6("Standard deviation"),
+            html.Div(children="Standard deviation"),
             dcc.Input(id="standard_deviation", type="number", value=1),
         ],
     ),
@@ -159,16 +165,18 @@ distribution_parameters = [
         id="cauchy",
         hidden=True,
         children=[
-            html.H6("No Parameters Required"),
+            html.Div(children="No Parameters Required", style={"font-style": "italic"}),
         ],
     ),
     html.Div(
         id="vonmises",
         hidden=True,
         children=[
-            html.H6("Mean"),
+            html.Div(children="Mean", style={"font-style": "italic"}),
             dcc.Input(id="mean", type="number", value=0),
-            html.H6(f"{chr(952)} (concentration)"),
+            html.Div(
+                children=f"{chr(952)} (concentration)", style={"font-style": "italic"}
+            ),
             dcc.Input(id="kappa", type="number", value=1, min=1, step=0.5),
         ],
     ),
@@ -176,9 +184,9 @@ distribution_parameters = [
         id="wald",
         hidden=True,
         children=[
-            html.H6("Mean"),
-            dcc.Input(id="mean", type="number", value=1, min=1, step=1),
-            html.H6(f"{chr(955)} (shape)"),
+            html.Div(children="Mean", style={"font-style": "italic"}),
+            dcc.Input(id="mean", type="number", value=0),
+            html.Div(children=f"{chr(955)} (shape)", style={"font-style": "italic"}),
             dcc.Input(id="lambda", type="number", value=1, min=1, step=0.5),
         ],
     ),
@@ -186,7 +194,7 @@ distribution_parameters = [
         id="weibull",
         hidden=True,
         children=[
-            html.H6(f"{chr(955)} (scale)"),
+            html.Div(children=f"{chr(955)} (scale)", style={"font-style": "italic"}),
             dcc.Input(id="lambda", type="number", value=1, min=1, step=0.1),
         ],
     ),
@@ -201,9 +209,9 @@ distribution_parameters_c = [
         id="normal_c",
         hidden=False,
         children=[
-            html.H6("Mean"),
+            html.Div(children="Mean"),
             dcc.Input(id="mean_c", type="number", value=0),
-            html.H6("Standard deviation"),
+            html.Div(children="Standard deviation"),
             dcc.Input(id="standard_deviation_c", type="number", value=1),
         ],
     ),
@@ -211,7 +219,7 @@ distribution_parameters_c = [
         id="poisson_c",
         hidden=True,
         children=[
-            html.H6("lambda"),
+            html.Div(children="lambda"),
             dcc.Input(id="lambda_c", type="number", value=1),
         ],
     ),
@@ -219,9 +227,11 @@ distribution_parameters_c = [
         id="binomial_c",
         hidden=True,
         children=[
-            html.H6("n (bernoulli trial)"),
+            html.Div(children="n (bernoulli trial)", style={"font-style": "italic"}),
             dcc.Input(id="n_c", type="number", value=10),
-            html.H6("p (probability of success)"),
+            html.Div(
+                children="p (probability of success)", style={"font-style": "italic"}
+            ),
             dcc.Input(id="p_c", type="number", value=0.5, min=0, max=1, step=0.1),
         ],
     ),
@@ -229,9 +239,13 @@ distribution_parameters_c = [
         id="nbinomial_c",
         hidden=True,
         children=[
-            html.H6("r (failures beforee success)"),
+            html.Div(
+                children="r (failures beforee success)", style={"font-style": "italic"}
+            ),
             dcc.Input(id="r_c", type="number", value=5, min=0, step=1),
-            html.H6("p (probability of success)"),
+            html.Div(
+                children="p (probability of success)", style={"font-style": "italic"}
+            ),
             dcc.Input(id="p_c", type="number", value=0.5, min=0, max=1, step=0.1),
         ],
     ),
@@ -239,7 +253,7 @@ distribution_parameters_c = [
         id="student_c",
         hidden=True,
         children=[
-            html.H6("Degreed of Freedom"),
+            html.Div(children="Degreed of Freedom", style={"font-style": "italic"}),
             dcc.Input(id="df_c", type="number", value=2, min=1, step=1),
         ],
     ),
@@ -247,9 +261,9 @@ distribution_parameters_c = [
         id="uniform_c",
         hidden=True,
         children=[
-            html.H6("Alpha"),
+            html.Div(children="Alpha", style={"font-style": "italic"}),
             dcc.Input(id="alpha_c", type="number", value=0, step=1),
-            html.H6("Beta"),
+            html.Div(children="Beta", style={"font-style": "italic"}),
             dcc.Input(id="beta_c", type="number", value=1, step=1),
         ],
     ),
@@ -257,9 +271,9 @@ distribution_parameters_c = [
         id="beta_c",
         hidden=True,
         children=[
-            html.H6(f"{chr(945)} (shape)"),
+            html.Div(children=f"{chr(945)} (shape)", style={"font-style": "italic"}),
             dcc.Input(id="alpha_c", type="number", value=2, min=1, step=1),
-            html.H6(f"{chr(946)} (scale)"),
+            html.Div(children=f"{chr(946)} (scale)", style={"font-style": "italic"}),
             dcc.Input(id="beta_c", type="number", value=3, min=1, step=1),
         ],
     ),
@@ -267,7 +281,7 @@ distribution_parameters_c = [
         id="chisq_c",
         hidden=True,
         children=[
-            html.H6("Degreed of Freedom"),
+            html.Div(children="Degreed of Freedom", style={"font-style": "italic"}),
             dcc.Input(id="df_c", type="number", value=2, min=1, step=1),
         ],
     ),
@@ -275,7 +289,7 @@ distribution_parameters_c = [
         id="exponential_c",
         hidden=True,
         children=[
-            html.H6("Lambda"),
+            html.Div(children="Lambda", style={"font-style": "italic"}),
             dcc.Input(id="lambda_c", type="number", value=3, min=1, step=0.1),
         ],
     ),
@@ -283,9 +297,9 @@ distribution_parameters_c = [
         id="f_c",
         hidden=True,
         children=[
-            html.H6("Degrees of Freedom 1"),
+            html.Div(children="Degrees of Freedom 1", style={"font-style": "italic"}),
             dcc.Input(id="df_1_c", type="number", value=5, min=1, step=1),
-            html.H6("Degrees of Freedom 2"),
+            html.Div(children="Degrees of Freedom 2", style={"font-style": "italic"}),
             dcc.Input(id="df_2_c", type="number", value=9, min=1, step=1),
         ],
     ),
@@ -293,9 +307,9 @@ distribution_parameters_c = [
         id="gamma_c",
         hidden=True,
         children=[
-            html.H6(f"{chr(952)} (shape)"),
+            html.Div(children=f"{chr(952)} (shape)", style={"font-style": "italic"}),
             dcc.Input(id="kappa_c", type="number", value=1, min=1, step=0.1),
-            html.H6(f"{chr(954)} (scale)"),
+            html.Div(children=f"{chr(954)} (scale)", style={"font-style": "italic"}),
             dcc.Input(id="theta_c", type="number", value=3, min=1, step=0.1),
         ],
     ),
@@ -303,9 +317,9 @@ distribution_parameters_c = [
         id="gumbel_c",
         hidden=True,
         children=[
-            html.H6("Mean"),
+            html.Div(children="Mean", style={"font-style": "italic"}),
             dcc.Input(id="mean_c", type="number", value=0),
-            html.H6(f"{chr(946)} (scale)"),
+            html.Div(children=f"{chr(946)} (scale)", style={"font-style": "italic"}),
             dcc.Input(id="beta_c", type="number", value=2, min=0, step=0.1),
         ],
     ),
@@ -313,9 +327,9 @@ distribution_parameters_c = [
         id="lognormal_c",
         hidden=True,
         children=[
-            html.H6("Mean"),
+            html.Div(children="Mean"),
             dcc.Input(id="mean_c", type="number", value=0),
-            html.H6("Standard deviation"),
+            html.Div(children="Standard deviation"),
             dcc.Input(id="standard_deviation", type="number", value=1),
         ],
     ),
@@ -323,16 +337,18 @@ distribution_parameters_c = [
         id="cauchy_c",
         hidden=True,
         children=[
-            html.H6("No Parameters Required"),
+            html.Div(children="No Parameters Required", style={"font-style": "italic"}),
         ],
     ),
     html.Div(
         id="vonmises_c",
         hidden=True,
         children=[
-            html.H6("Mean"),
+            html.Div(children="Mean", style={"font-style": "italic"}),
             dcc.Input(id="mean_c", type="number", value=0),
-            html.H6(f"{chr(952)} (concentration)"),
+            html.Div(
+                children=f"{chr(952)} (concentration)", style={"font-style": "italic"}
+            ),
             dcc.Input(id="kappa", type="number", value=1, min=1, step=0.5),
         ],
     ),
@@ -340,9 +356,9 @@ distribution_parameters_c = [
         id="wald_c",
         hidden=True,
         children=[
-            html.H6("Mean"),
-            dcc.Input(id="mean_c", type="number", value=1, min=1, step=1),
-            html.H6(f"{chr(955)} (shape)"),
+            html.Div(children="Mean", style={"font-style": "italic"}),
+            dcc.Input(id="mean_c", type="number", value=0),
+            html.Div(children=f"{chr(955)} (shape)", style={"font-style": "italic"}),
             dcc.Input(id="lambda_c", type="number", value=1, min=1, step=0.5),
         ],
     ),
@@ -350,11 +366,10 @@ distribution_parameters_c = [
         id="weibull_c",
         hidden=True,
         children=[
-            html.H6(f"{chr(955)} (scale)"),
+            html.Div(children=f"{chr(955)} (scale)", style={"font-style": "italic"}),
             dcc.Input(id="lambda_c", type="number", value=1, min=1, step=0.1),
         ],
     ),
-    html.Div(id="bottom_spacer")
 ]
 
 
@@ -362,6 +377,8 @@ distribution_parameters_c = [
 ## left_menu
 ##----------------------------------------------------------------
 left_menu = [
+    html.Div(
+        [
             html.H6("Bins"),
             dcc.Slider(
                 id="bins",
@@ -394,7 +411,15 @@ left_menu = [
                     html.Div(distribution_parameters),
                     html.Div(id="parameter_registry", hidden=True),
                 ],
+                style={"font-size": 14, "margin-top": "20px"},
             ),
+        ],
+    ),
+    html.Div(
+        [],
+        # -------------------------------------------------------------------------- div2 left on-off separator
+        className="top_spacer",
+    ),
     html.Div(
         [dcc.Checklist(id="onoff", options=[{"label": " COMPARE", "value": "Yes"},])]
     ),
@@ -427,6 +452,7 @@ left_menu = [
                         html.Div(distribution_parameters_c),
                         html.Div(id="parameter_registry_c", hidden=True),
                     ],
+                    style={"font-size": 14, "margin-top": "20px"},
                 ),
             ]
         ),
